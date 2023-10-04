@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar elevation="2" class="app-navbar position-relative">
+  <v-app-bar elevation="2" class="app-navbar position-relative" density="comfortable">
     <span class="d-md-none">
       <v-app-bar-nav-icon @click="sidebar = !sidebar"></v-app-bar-nav-icon>
     </span>
@@ -18,16 +18,22 @@
     </v-list>
 
     <v-list nav class="d-flex">
-      <v-text-field label="Search" class="nav-search me-2" hide-details density="compact" append-inner-icon="mdi-magnify">
+      <v-text-field label="Search" class="nav-search hidden-sm-and-down me-2" hide-details density="compact"
+        append-inner-icon="mdi-magnify">
       </v-text-field>
-      <v-list-item class="hidden-sm-and-down me-2" v-for="item in menuItems" :key="item.title" :title="item.title"
-        :prepend-icon="item.icon" :value="item.title" @click="routerHandler(item.path)">
+
+      <v-list-item class="hidden-sm-and-down me-2 px-4 text-blue" key="Sign up" variant="outlined" title="Sign up"
+        to="/sign-up">
+      </v-list-item>
+      <v-list-item class="hidden-sm-and-down me-2 bg-blue px-4" key="Sign in" title="Sign in" to="#">
       </v-list-item>
     </v-list>
   </v-app-bar>
 
   <v-navigation-drawer v-model="sidebar" temporary>
     <v-list nav>
+      <v-text-field label="Search" class="nav-search me-2" hide-details density="compact" append-inner-icon="mdi-magnify">
+      </v-text-field>
       <v-list-item v-for="item in menuItems3" :key="item.title" :title="item.title" :prepend-icon="item.icon"
         :value="item.title" @click="routerHandler(item.path)">
       </v-list-item>
@@ -42,21 +48,19 @@ export default {
     return {
       appTitle: "Awesome App",
       sidebar: false,
-      menuItems: [
-        { title: "Sign Up", path: "/sign-up", icon: "mdi-account-plus" },
-        { title: "Sign In", path: "#", icon: "mdi-login" },
-      ],
       menuItems2: [
         { title: "Blogs", path: "#" },
         { title: "Categories", path: "#" },
         { title: "Support", path: "#" },
         { title: "Introduction", path: "#" },
+        { title: "Create blog", path: "/create-blog" },
       ],
       menuItems3: [
         { title: "Blogs", path: "#" },
         { title: "Categories", path: "#" },
         { title: "Support", path: "#" },
         { title: "Introduction", path: "#" },
+        { title: "Create blog", path: "#" },
         { title: "Sign Up", path: "/sign-up", icon: "mdi-account-plus" },
         { title: "Sign In", path: "#", icon: "mdi-login" },
       ]

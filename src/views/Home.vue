@@ -1,80 +1,98 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="10">
-        <v-row>
-          <v-col>
-            <h3>Tourism</h3>
-            <v-divider thickness="2"></v-divider>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col cols="7" class="d-flex border">
-            <v-img src="../assets/logo.svg" alt="" width="500" height="200"></v-img>
-          </v-col>
-          <v-col cols="5">
-            <div class="text-justify">
-              <h3>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
-                nemo maiores quas
+      <v-col cols="10" v-if="categories">
+        <div v-for="(category, categoryIndex) in categories" v-bind:key="'category' + categoryIndex">
+          <v-row class="mt-1">
+            <v-col>
+              <h3 class="text-uppercase">
+                <v-icon icon="mdi-newspaper-variant-outline"></v-icon>
+                <router-link to="#" class="ms-1 text-decoration-none text-black">
+                  {{ category }}
+                </router-link>
               </h3>
-              <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Aliquam modi deleniti quo maxime atque voluptate qui mollitia,
-                velit consectetur, officiis fuga corporis officia neque debitis
-                quos quisquam sunt labore! Debitis!
-              </p>
-            </div>
-          </v-col>
-        </v-row>
+              <v-divider thickness="2"></v-divider>
+            </v-col>
+          </v-row>
 
-        <v-row>
-          <v-col>
-            <div class="d-flex">
-              <v-img src="../assets/logo.svg" alt="" width="60"></v-img>
-              <span class="text-justify ms-2">
-                <h4>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit
-                </h4>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa
-                  laudantium aliquid soluta saepe aut
-                </p>
-              </span>
-            </div>
-          </v-col>
-          <v-col>
-            <div class="d-flex">
-              <v-img src="../assets/logo.svg" alt="" width="60"></v-img>
-              <span class="text-justify ms-2">
-                <h4>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit
-                </h4>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa
-                  laudantium aliquid soluta saepe aut
-                </p>
-              </span>
-            </div>
-          </v-col>
-          <v-col>
-            <div class="d-flex">
-              <v-img src="../assets/logo.svg" alt="" width="60"></v-img>
-              <span class="text-justify ms-2">
-                <h4>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit
-                </h4>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa
-                  laudantium aliquid soluta saepe aut
-                </p>
-              </span>
-            </div>
-          </v-col>
-        </v-row>
 
-        <v-divider class="my-3"></v-divider>
+          <v-row>
+            <v-col cols="6" class="border">
+              <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][0].id } }"
+                class="d-flex align-center">
+                <v-img src="../assets/logo.svg" alt="" height="200"></v-img>
+              </router-link>
+            </v-col>
+            <v-col cols="6">
+              <div class="text-justify">
+                <h3>
+                  <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][0].id } }"
+                    class="text-decoration-none text-black">
+                    {{ blogsByCategory[categoryIndex][0].title }}
+                  </router-link>
+                </h3>
+                <p>
+                  <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][0].id } }"
+                    class="text-decoration-none text-black">
+                    {{ blogsByCategory[categoryIndex][0].description }}
+                  </router-link>
+                </p>
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col v-for="n in [1, 2, 3]" v-bind:key="n">
+              <div class="d-flex" v-if="blogsByCategory[categoryIndex][n]">
+                <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
+                  class="d-flex align-center">
+                  <v-img src="../assets/logo.svg" alt="" width="100" height="100%" class="border"></v-img>
+                </router-link>
+                <span class="text-justify ms-2">
+                  <h4>
+                    <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
+                      class="text-decoration-none text-black">
+                      {{ blogsByCategory[categoryIndex][n].title }}
+                    </router-link>
+                  </h4>
+                  <p class="blog-description">
+                    <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
+                      class="text-decoration-none text-black">
+                      {{ blogsByCategory[categoryIndex][n].description }}
+                    </router-link>
+                  </p>
+                </span>
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col v-for="n in [4, 5, 6]" v-bind:key="n">
+              <div class="d-flex" v-if="blogsByCategory[categoryIndex][n]">
+                <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
+                  class="d-flex align-center">
+                  <v-img src="../assets/logo.svg" alt="" width="100" height="100%" class="border"></v-img>
+                </router-link>
+                <span class="text-justify ms-2">
+                  <h4>
+                    <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
+                      class="text-decoration-none text-black">
+                      {{ blogsByCategory[categoryIndex][n].title }}
+                    </router-link>
+                  </h4>
+                  <p class="blog-description">
+                    <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
+                      class="text-decoration-none text-black">
+                      {{ blogsByCategory[categoryIndex][n].description }}
+                    </router-link>
+                  </p>
+                </span>
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-divider class="my-3"></v-divider>
+        </div>
       </v-col>
 
       <v-divider vertical inset></v-divider>
@@ -108,7 +126,7 @@
           <v-card>
             <v-card-title class="text-body-1 font-weight-bold text-center">Email Subscription</v-card-title>
             <v-card-text>
-              <p>Subscribe to receive the lastest information!</p>
+              <p>Subscribe to receive the lastest information! </p>
               <v-text-field label="Name" hide-details density="compact"></v-text-field>
               <v-text-field label="Email" class="mt-2" density="compact" hide-details></v-text-field>
             </v-card-text>
@@ -122,4 +140,74 @@
   </v-container>
 </template>
 
-<script setup></script>
+<script setup>
+import { useBlogsStore } from "../store/blogsStore";
+import { ref, onMounted, onBeforeMount } from "vue"
+
+const blogsStore = useBlogsStore()
+let blogs = ref([])
+let blogsByCategory = ref([])
+let categories = ref([])
+
+onMounted(async () => {
+  await getBlogs()
+  blogs.value = blogsStore.blogs
+
+  getCategory()
+
+  blogsByCategory = filterBlogsByCategory()
+
+  console.log('mounted...')
+  console.log(categories)
+  console.log(blogsByCategory)
+})
+
+const getBlogs = async () => {
+  await blogsStore.getBlogs();
+}
+
+const getCategory = () => {
+  blogs.value.forEach((blog) => {
+    categories.value.push(blog.category)
+  })
+  categories = unique(categories.value)
+}
+
+const unique = (arr) => {
+  var newArr = []
+  for (var i = 0; i < arr.length; i++) {
+    if (newArr.indexOf(arr[i]) === -1) {
+      newArr.push(arr[i])
+    }
+  }
+  return newArr
+}
+
+const filterBlogsByCategory = () => {
+  let newBlogArr = []
+  categories.forEach((category) => {
+    let filteredBlogs = blogs.value.filter((blog) => {
+      return blog.category == category
+    })
+    newBlogArr.push(filteredBlogs)
+  })
+  return newBlogArr
+}
+</script>
+
+<style scoped>
+a:hover {
+  color: #2196F3 !important;
+}
+
+.blog-description {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 25px;
+  -webkit-line-clamp: 3;
+  height: 75px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+</style>
