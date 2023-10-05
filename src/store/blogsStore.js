@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import handleUserAPI from "@/API/handleUserAPI";
 import handleBlogAPI from "@/API/handleBlogAPI";
 
 export const useBlogsStore = defineStore("blogsStore", {
@@ -7,14 +6,13 @@ export const useBlogsStore = defineStore("blogsStore", {
     blogs: [],
   }),
   actions: {
-    // async createUser(newUserData) {
-    //   await handleUserAPI.createUser(newUserData);
-    //   this.getUsers();
-    // },
+    async createBlog(newBlog) {
+      await handleBlogAPI.createBlog(newBlog);
+    },
 
     async getBlogs() {
       const response = await handleBlogAPI.getBlogs();
-      return this.blogs = response.blogs;
+      return (this.blogs = response.blogs);
     },
 
     // async updateUser(userId, updatedData) {

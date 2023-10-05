@@ -1,12 +1,12 @@
 import axiosInstance from "@/utils/axiosInstance";
 
-// const createUser = async (newUserData) => {
-//   try {
-//     return await axiosInstance.post("create-user", newUserData);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+const createBlog = async (newBlogData) => {
+  try {
+    return await axiosInstance.post("create-blog", newBlogData);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const getBlogs = async () => {
   try {
@@ -32,4 +32,4 @@ const getBlogs = async () => {
 //   }
 // };
 
-export default { getBlogs };
+export default { createBlog,getBlogs };

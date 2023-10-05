@@ -20,7 +20,7 @@
             <v-col cols="6" class="border">
               <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][0].id } }"
                 class="d-flex align-center">
-                <v-img src="../assets/logo.svg" alt="" height="200"></v-img>
+                <v-img :src="getImageSrc(blogsByCategory[categoryIndex][0].image)" alt="" height="200" cover></v-img>
               </router-link>
             </v-col>
             <v-col cols="6">
@@ -46,7 +46,9 @@
               <div class="d-flex" v-if="blogsByCategory[categoryIndex][n]">
                 <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
                   class="d-flex align-center">
-                  <v-img src="../assets/logo.svg" alt="" width="100" height="100%" class="border"></v-img>
+                  <v-img :src="getImageSrc(blogsByCategory[categoryIndex][n].image)" alt="" width="100" height="100%"
+                    class="border">
+                  </v-img>
                 </router-link>
                 <span class="text-justify ms-2">
                   <h4>
@@ -71,7 +73,8 @@
               <div class="d-flex" v-if="blogsByCategory[categoryIndex][n]">
                 <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
                   class="d-flex align-center">
-                  <v-img src="../assets/logo.svg" alt="" width="100" height="100%" class="border"></v-img>
+                  <v-img :src="getImageSrc(blogsByCategory[categoryIndex][n].image)" alt="" width="100" height="100%"
+                    class="border"></v-img>
                 </router-link>
                 <span class="text-justify ms-2">
                   <h4>
@@ -143,11 +146,13 @@
 <script setup>
 import { useBlogsStore } from "../store/blogsStore";
 import { ref, onMounted, onBeforeMount } from "vue"
+import { Buffer } from 'buffer';
 
 const blogsStore = useBlogsStore()
 let blogs = ref([])
 let blogsByCategory = ref([])
 let categories = ref([])
+let imageBuffer = ref('')
 
 onMounted(async () => {
   await getBlogs()
@@ -158,6 +163,7 @@ onMounted(async () => {
   blogsByCategory = filterBlogsByCategory()
 
   console.log('mounted...')
+
   console.log(categories)
   console.log(blogsByCategory)
 })
@@ -192,6 +198,14 @@ const filterBlogsByCategory = () => {
     newBlogArr.push(filteredBlogs)
   })
   return newBlogArr
+}
+
+const getImageSrc = (image) => {
+  if (image) {
+    const imageBuffer = new Buffer(image, 'base64').toString('binary')
+    return imageBuffer
+  }
+  console.log('No imageBuffer')
 }
 </script>
 

@@ -6,12 +6,16 @@
           <h3>Create Blog</h3>
         </div>
 
-        <v-textarea v-model="title" label="Title" class="mt-3" hide-details variant="outlined" auto-grow
-          rows="1"></v-textarea>
+        <v-textarea v-model="title" label="Title" class="mt-3" hide-details variant="outlined" auto-grow rows="1">
+        </v-textarea>
 
         <v-textarea v-model="description" label="Description" class="my-3" hide-details variant="outlined" auto-grow
-          rows="3"></v-textarea>
+          rows="3">
+        </v-textarea>
 
+        <v-autocomplete v-model="values" :items="items" density="compact" label="Category" class="my-3" hide-details
+          variant="outlined">
+        </v-autocomplete>
 
         <div v-if="editor" class="editor-control">
           <v-btn size="small" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
@@ -46,7 +50,12 @@
             :class="{ 'is-active': editor.isActive('strike') }">
             <v-icon icon="mdi-format-strikethrough"></v-icon>
           </v-btn>
-          <v-btn size="small" @click="addImage"><v-icon icon="mdi-image-outline"></v-icon></v-btn>
+          <v-btn size="small" class="px-0 py-0">
+            <label htmlFor="add-img" class="px-4 py-1" style="cursor:pointer">
+              <v-icon icon="mdi-image-outline"></v-icon>
+            </label>
+            <v-file-input id="add-img" @change="handleAddImg" class="d-none"></v-file-input>
+          </v-btn>
           <v-btn size="small" @click="editor.chain().focus().toggleHighlight().run()"
             :class="{ 'is-active': editor.isActive('highlight') }">
             <v-icon icon="mdi-format-color-highlight"></v-icon>
@@ -85,9 +94,9 @@
       </v-col>
 
       <v-col cols="3">
-        <div class="border">
-          <p>Upload image</p>
-          <v-file-input id="img-input" @change="handlePreviewImg" label="File input" class="d-none"></v-file-input>
+        <div class="border mt-15">
+          <h4>Thumnail</h4>
+          <v-file-input id="img-input" @change="handleUploadImg" label="File input" class="d-none"></v-file-input>
           <div :style="{ backgroundImage: `url(${previewImageUrl})` }" class="preview-image border">
             <label htmlFor="img-input" class="img-input d-flex align-center justify-center">
               <v-icon v-if="!previewImageUrl" icon="mdi-image-plus-outline" size="large" class="img-upload-icon">
@@ -102,10 +111,12 @@
       <v-col>
         <div class="text-center">
           <v-btn class="bg-red me-3">Cancel</v-btn>
-          <v-btn class="bg-blue px-7">Save</v-btn>
+          <v-btn class="bg-blue px-7" @click="handleSave">Save</v-btn>
         </div>
       </v-col>
     </v-row>
+
+    <div v-html="html"></div>
   </v-container>
 </template>
 
@@ -121,6 +132,9 @@ import TextAlign from '@tiptap/extension-text-align'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 
+import getBase64 from '@/utils/getBase64'
+import { useBlogsStore } from "../store/blogsStore";
+
 export default {
   components: {
     EditorContent,
@@ -132,7 +146,13 @@ export default {
       previewImageUrl: '',
       title: '',
       description: '',
-      author: ''
+      image: '',
+      author: '',
+      content: '',
+      html: '',
+      items: ['foo', 'bar', 'fizz', 'buzz'],
+      values: '',
+      diag: false,
     }
   },
 
@@ -155,22 +175,53 @@ export default {
   },
 
   methods: {
-    handlePreviewImg(e) {
+    async handleUploadImg(e) {
       let data = e.target.files
       let file = data[0]
       if (file) {
-        var objectUrl = URL.createObjectURL(file)
+        let base64 = await getBase64(file)
+        console.log(base64)
+        this.image = base64
+        let objectUrl = URL.createObjectURL(file)
+        console.log(objectUrl)
         this.previewImageUrl = objectUrl
       }
-      console.log(objectUrl)
-    },
-    addImage() {
-      const url = window.prompt('URL')
 
-      if (url) {
-        this.editor.chain().focus().setImage({ src: url }).run()
+    },
+
+    handleAddImg(e) {
+      let data = e.target.files
+      let file = data[0]
+      if (file) {
+
+        const url = URL.createObjectURL(file)
+
+        if (url) {
+          this.editor.chain().focus().setImage({ src: url }).run()
+        }
       }
     },
+
+    handleSave() {
+      this.html = this.editor.getHTML()
+      console.log(this.html)
+      const blogsStore = useBlogsStore();
+      blogsStore.createBlog({
+        title: this.title,
+        description: this.description,
+        category: this.category,
+        content: this.html,
+        author: this.author,
+        image: this.image,
+        userId: this.userId,
+      })
+      console.log('create blog...')
+    },
+
+
+
+
+
   }
 }
 </script>
@@ -233,7 +284,7 @@ export default {
 
   img {
     max-width: 100%;
-    height: auto;
+    height: 100%;
 
     &.ProseMirror-selectednode {
       outline: 3px solid #68CEF8;
@@ -253,7 +304,7 @@ export default {
 .tiptap.ProseMirror {
   border: #ababab solid 1px;
   padding: 5px;
-  height: 200px;
+  min-height: 200px;
 }
 
 .preview-image {

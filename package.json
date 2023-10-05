@@ -22,6 +22,7 @@
     "@tiptap/starter-kit": "^2.1.11",
     "@tiptap/vue-3": "^2.1.11",
     "axios": "^1.5.0",
+    "buffer": "^6.0.3",
     "core-js": "^3.29.0",
     "md5": "^2.3.0",
     "pinia": "^2.0.0",
