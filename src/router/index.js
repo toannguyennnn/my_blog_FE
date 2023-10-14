@@ -1,51 +1,54 @@
-// Composables
 import { createRouter, createWebHistory } from "vue-router";
+import DefaultVue from "@/layouts/default/Default.vue";
+import HomeVue from "@/views/Home.vue";
+import AdminVue from "@/views/Admin.vue";
+import ManageBlogsVue from "@/views/ManageBlogs.vue";
+import TestVue from "@/views/Test.vue";
+import BlogVue from "@/views/Blog.vue";
+import CreateBlogVue from "@/views/CreateBlog.vue";
+import SignUpVue from "@/views/SignUp.vue";
 
 const routes = [
   {
     path: "/",
-    component: () => import("@/layouts/default/Default.vue"),
+    component: DefaultVue,
     children: [
       {
         path: "",
         name: "Home",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import("@/views/Home.vue"),
+        component: HomeVue,
       },
       {
         path: "/admin",
         name: "Admin",
-        component: () => import("@/views/Admin.vue"),
+        component: AdminVue,
+      },
+      {
+        path: "/manage-blogs",
+        name: "Manage Blogs",
+        component: ManageBlogsVue,
+      },
+      {
+        path: "/test",
+        name: "Test",
+        component: TestVue,
       },
       {
         path: "/blog/:id",
         name: "Blog",
-        component: () => import("@/views/Blog.vue"),
+        component: BlogVue,
       },
       {
         path: "/create-blog",
         name: "CreateBlog",
-        component: () => import("@/views/CreateBlog.vue"),
+        component: CreateBlogVue,
       },
-      {
-        path: "/sign-up",
-        name: "SignUp",
-        component: () => import("@/views/SignUp.vue"),
-      }
     ],
   },
   {
     path: "/sign-up",
-    component: () => import("@/layouts/default/Auth.vue"),
-    children: [
-      {
-        path: "/sign-up",
-        name: "SignUp",
-        component: () => import("@/views/SignUp.vue"),
-      },
-    ],
+    name: "Sign Up",
+    component: SignUpVue,
   },
 ];
 

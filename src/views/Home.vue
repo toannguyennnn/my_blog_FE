@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="10" v-if="categories">
-        <div v-for="(category, categoryIndex) in categories" v-bind:key="'category' + categoryIndex">
+      <v-col cols="10">
+        <div v-if="categories" v-for="(category, categoryIndex) in categories" v-bind:key="'category' + categoryIndex">
           <v-row class="mt-1">
             <v-col>
               <h3 class="text-uppercase">
@@ -31,7 +31,7 @@
                     {{ blogsByCategory[categoryIndex][0].title }}
                   </router-link>
                 </h3>
-                <p>
+                <p class="blog-description">
                   <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][0].id } }"
                     class="text-decoration-none text-black">
                     {{ blogsByCategory[categoryIndex][0].description }}
@@ -47,7 +47,7 @@
                 <router-link :to="{ name: 'Blog', params: { id: blogsByCategory[categoryIndex][n].id } }"
                   class="d-flex align-center">
                   <v-img :src="getImageSrc(blogsByCategory[categoryIndex][n].image)" alt="" width="100" height="100%"
-                    class="border">
+                    class="border" cover>
                   </v-img>
                 </router-link>
                 <span class="text-justify ms-2">
@@ -95,6 +95,9 @@
           </v-row>
 
           <v-divider class="my-3"></v-divider>
+        </div>
+        <div v-else class="h-75 d-flex align-center justify-center">
+          <v-progress-circular indeterminate></v-progress-circular>
         </div>
       </v-col>
 
@@ -149,9 +152,9 @@ import { ref, onMounted, onBeforeMount } from "vue"
 import { Buffer } from 'buffer';
 
 const blogsStore = useBlogsStore()
-let blogs = ref([])
+let blogs = ref(null)
 let blogsByCategory = ref([])
-let categories = ref([])
+let categories = ref(null)
 let imageBuffer = ref('')
 
 onMounted(async () => {
@@ -169,10 +172,11 @@ onMounted(async () => {
 })
 
 const getBlogs = async () => {
-  await blogsStore.getBlogs();
+  await blogsStore.getBlogs('all');
 }
 
 const getCategory = () => {
+  categories.value = []
   blogs.value.forEach((blog) => {
     categories.value.push(blog.category)
   })
@@ -209,7 +213,7 @@ const getImageSrc = (image) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 a:hover {
   color: #2196F3 !important;
 }

@@ -13,7 +13,9 @@ export const useUsersStore = defineStore("usersStore", {
 
     async getUsers() {
       const response = await handleUserAPI.getUsers();
-      this.users = response.users;
+      if (response) {
+        this.users = response.users;
+      }
     },
 
     async updateUser(userId, updatedData) {

@@ -63,7 +63,7 @@ export default {
         { title: "Create blog", path: "#" },
         { title: "Sign Up", path: "/sign-up", icon: "mdi-account-plus" },
         { title: "Sign In", path: "#", icon: "mdi-login" },
-      ]
+      ],
     };
   },
   methods: {

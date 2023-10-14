@@ -10,9 +10,12 @@ export const useBlogsStore = defineStore("blogsStore", {
       await handleBlogAPI.createBlog(newBlog);
     },
 
-    async getBlogs() {
-      const response = await handleBlogAPI.getBlogs();
-      return (this.blogs = response.blogs);
+    async getBlogs(blogId) {
+      const response = await handleBlogAPI.getBlogs(blogId);
+      if (response) {
+         return (this.blogs = response.blogs);
+      }
+
     },
 
     // async updateUser(userId, updatedData) {
@@ -20,9 +23,9 @@ export const useBlogsStore = defineStore("blogsStore", {
     //   this.getUsers();
     // },
 
-    // async deleteUser(userId) {
-    //   await handleUserAPI.deleteUser(userId);
-    //   this.getUsers();
-    // },
+    async deleteBlog(blogId) {
+      await handleBlogAPI.deleteBlog(blogId);
+      this.getBlogs('all');
+    },
   },
 });

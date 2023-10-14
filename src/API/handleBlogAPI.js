@@ -8,9 +8,9 @@ const createBlog = async (newBlogData) => {
   }
 };
 
-const getBlogs = async () => {
+const getBlogs = async (blogId) => {
   try {
-    return await axiosInstance.get("blogs/all");
+    return await axiosInstance.get(`blogs/${blogId}`);
   } catch (error) {
     console.error(error);
   }
@@ -24,12 +24,12 @@ const getBlogs = async () => {
 //   }
 // };
 
-// const deleteUser = async (userId) => {
-//   try {
-//     return await axiosInstance.delete(`delete-user/${userId}`);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+const deleteBlog = async (blogId) => {
+  try {
+    return await axiosInstance.delete(`delete-blog/${blogId}`);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-export default { createBlog,getBlogs };
+export default { createBlog, getBlogs, deleteBlog };

@@ -6,15 +6,15 @@
           <h3>Create Blog</h3>
         </div>
 
-        <v-textarea v-model="title" label="Title" class="mt-3" hide-details variant="outlined" auto-grow rows="1">
+        <v-textarea v-model="newBlog.title" label="Title" class="mt-3" hide-details variant="outlined" auto-grow rows="1">
         </v-textarea>
 
-        <v-textarea v-model="description" label="Description" class="my-3" hide-details variant="outlined" auto-grow
-          rows="3">
+        <v-textarea v-model="newBlog.description" label="Description" class="my-3" hide-details variant="outlined"
+          auto-grow rows="3">
         </v-textarea>
 
-        <v-autocomplete v-model="values" :items="items" density="compact" label="Category" class="my-3" hide-details
-          variant="outlined">
+        <v-autocomplete v-model="newBlog.category" :items="items" density="compact" label="Category" class="my-3"
+          hide-details variant="outlined">
         </v-autocomplete>
 
         <div v-if="editor" class="editor-control">
@@ -88,7 +88,8 @@
 
         <editor-content :editor="editor" class="editor-content" />
 
-        <v-text-field v-model="author" label="Author" class="mt-3" hide-details variant="outlined" density="compact">
+        <v-text-field v-model="newBlog.author" label="Author" class="mt-3" hide-details variant="outlined"
+          density="compact">
         </v-text-field>
 
       </v-col>
@@ -116,7 +117,9 @@
       </v-col>
     </v-row>
 
-    <div v-html="html"></div>
+    <Snackbar v-model="isShowSnackBar" :text="snackBarText" :icon="snackBarIcon" :snackbarColor="snackbarColor" />
+    <!-- <v-btn @click="test"></v-btn> -->
+    <!-- <div v-html="html"></div> -->
   </v-container>
 </template>
 
@@ -134,25 +137,32 @@ import { Editor, EditorContent } from '@tiptap/vue-3'
 
 import getBase64 from '@/utils/getBase64'
 import { useBlogsStore } from "../store/blogsStore";
+import Snackbar from '@/components/Snackbar.vue'
 
 export default {
   components: {
     EditorContent,
+    Snackbar
   },
 
   data() {
     return {
       editor: null,
       previewImageUrl: '',
-      title: '',
-      description: '',
-      image: '',
-      author: '',
+      newBlog: {
+        title: '',
+        description: '',
+        category: '',
+        image: '',
+        author: '',
+        editorContent: '',
+      },
       content: '',
-      html: '',
-      items: ['foo', 'bar', 'fizz', 'buzz'],
-      values: '',
-      diag: false,
+      items: ['category 1', 'category 2', 'category 3', 'category 4'],
+      isShowSnackBar: false,
+      snackBarText: '',
+      snackbarColor: '',
+      snackBarIcon: ''
     }
   },
 
@@ -181,14 +191,16 @@ export default {
       if (file) {
         let base64 = await getBase64(file)
         console.log(base64)
-        this.image = base64
+        this.newBlog.image = base64
         let objectUrl = URL.createObjectURL(file)
         console.log(objectUrl)
         this.previewImageUrl = objectUrl
       }
 
     },
-
+    // test() {
+    //   this.isShowSnackBar = true
+    // },
     handleAddImg(e) {
       let data = e.target.files
       let file = data[0]
@@ -203,24 +215,53 @@ export default {
     },
 
     handleSave() {
-      this.html = this.editor.getHTML()
-      console.log(this.html)
-      const blogsStore = useBlogsStore();
-      blogsStore.createBlog({
-        title: this.title,
-        description: this.description,
-        category: this.category,
-        content: this.html,
-        author: this.author,
-        image: this.image,
-        userId: this.userId,
-      })
-      console.log('create blog...')
+      this.newBlog.editorContent = this.editor.getHTML()
+      if (this.newBlog.title &&
+        this.newBlog.description &&
+        this.newBlog.category &&
+        this.newBlog.editorContent &&
+        this.newBlog.author &&
+        this.newBlog.image) {
+        const blogsStore = useBlogsStore();
+
+        blogsStore.createBlog({
+          title: this.newBlog.title,
+          description: this.newBlog.description,
+          category: this.newBlog.category,
+          content: this.newBlog.editorContent,
+          author: this.newBlog.author,
+          image: this.newBlog.image,
+          userId: this.newBlog.userId,
+        })
+        console.log('create blog...')
+        this.isShowSnackBar = true
+        this.snackBarText = 'Create blog successfully!'
+        this.snackbarColor = 'green'
+        this.snackBarIcon = 'mdi-check-circle'
+        this.reset()
+      } else {
+        console.log('Failed...')
+        this.isShowSnackBar = true
+        this.snackbarColor = 'red'
+        this.snackBarText = 'Something went wrong!'
+        this.snackBarIcon = 'mdi-alert-circle'
+      }
+
     },
 
-
-
-
+    reset() {
+      this.newBlog = {
+        title: '',
+        description: '',
+        category: '',
+        image: '',
+        author: '',
+        editorContent: '',
+      }
+      this.previewImageUrl = ''
+      this.editor.content = ''
+      console.log(this.newBlog)
+    }
 
   }
 }
