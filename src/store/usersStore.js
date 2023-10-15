@@ -9,6 +9,7 @@ export const useUsersStore = defineStore("usersStore", {
     async createUser(newUserData) {
       await handleUserAPI.createUser(newUserData);
       this.getUsers();
+      // location.reload();
     },
 
     async getUsers() {
