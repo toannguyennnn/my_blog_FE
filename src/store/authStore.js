@@ -3,28 +3,15 @@ import handleAuthAPI from "@/API/handleAuthAPI";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
-    users: [],
+    // user: null,
   }),
   actions: {
     async signUp(newUserData) {
       await handleAuthAPI.signUp(newUserData);
     },
-
-    // async getUsers() {
-    //   const response = await handleUserAPI.getUsers();
-    //   if (response) {
-    //     this.users = response.users;
-    //   }
-    // },
-
-    // async updateUser(userId, updatedData) {
-    //   await handleUserAPI.updateUser(userId, updatedData);
-    //   this.getUsers();
-    // },
-
-    // async deleteUser(userId) {
-    //   await handleUserAPI.deleteUser(userId);
-    //   this.getUsers();
-    // },
+    async logIn(userData) {
+      const data = await handleAuthAPI.logIn(userData);
+      return data
+    },
   },
 });

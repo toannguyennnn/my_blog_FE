@@ -11,28 +11,16 @@ const signUp = async (newUserData) => {
   }
 };
 
-// const getUsers = async () => {
-//   try {
-//     return await axiosInstance.get("users/all");
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+const logIn = async (userData) => {
+  try {
+    const response = await axiosInstance.post("log-in", userData);
+    // if (response.data.user) {
+    //   location.assign("/");
+    // }
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-// const updateUser = async (userId, updatedData) => {
-//   try {
-//     return await axiosInstance.put(`edit-user/${userId}`, updatedData);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-// const deleteUser = async (userId) => {
-//   try {
-//     return await axiosInstance.delete(`delete-user/${userId}`);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-export default { signUp };
+export default { signUp, logIn };
