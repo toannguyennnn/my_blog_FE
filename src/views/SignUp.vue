@@ -26,10 +26,10 @@
             <h2 class="text-center py-3">Sign Up</h2>
             <v-card-text>
               <v-text-field
-                v-model="user.firstName"
+                v-model="user.fullname"
                 :readonly="loading"
                 :rules="[required]"
-                label="Name"
+                label="Fullname"
                 density="compact"
                 prepend-inner-icon="mdi-account-circle-outline"
               ></v-text-field>
@@ -100,9 +100,7 @@ export default {
   data() {
     return {
       user: {
-        firstName: "",
-        lastName: "",
-        address: "",
+        fullname: "",
         email: "",
         phonenumber: "",
         harshPassword: "",
@@ -128,12 +126,10 @@ export default {
       try {
         this.user.harshPassword = md5(this.password);
         await this.authStore.signUp({
-          firstName: this.user.firstName,
-          lastName: this.user.lastName,
+          fullname: this.user.fullname,
           email: this.user.email,
           password: this.user.harshPassword,
           phonenumber: this.user.phonenumber,
-          address: this.user.address,
         });
         this.loading = false;
 

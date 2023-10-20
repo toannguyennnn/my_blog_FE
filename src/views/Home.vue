@@ -117,7 +117,10 @@
                 </span>
               </div>
 
-              <v-divider class="mt-3"></v-divider>
+              <v-divider
+                v-if="blogsByCategory[categoryIndex][n]"
+                class="mt-3"
+              ></v-divider>
             </v-col>
           </v-row>
 
@@ -168,6 +171,10 @@
                   </p>
                 </span>
               </div>
+              <v-divider
+                v-if="blogsByCategory[categoryIndex][n]"
+                class="mt-3"
+              ></v-divider>
             </v-col>
           </v-row>
 
