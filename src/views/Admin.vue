@@ -11,26 +11,22 @@
           <thead>
             <tr>
               <th>Index</th>
-              <th>firstname</th>
-              <th>lastname</th>
+              <th>UserId</th>
+              <th>fullname</th>
               <th>email</th>
               <th>phonenumber</th>
-              <th>address</th>
-              <th>gender</th>
-              <th>role</th>
+              <th>User group</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(user, index) in usersStore.users" v-bind:key="user.id">
               <td>{{ index + 1 }}</td>
-              <td>{{ user.firstName }}</td>
-              <td>{{ user.lastName }}</td>
+              <td>{{ user.id }}</td>
+              <td>{{ user.fullname }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.phonenumber }}</td>
-              <td>{{ user.address }}</td>
-              <td>{{ user.gender }}</td>
-              <td>{{ user.roleId }}</td>
+              <td>{{ user.userGroup_id }}</td>
               <td>
                 <v-btn
                   @click="editUser(user)"
@@ -60,14 +56,8 @@
           <v-text-field
             class="mb-3"
             hide-details
-            label="First name"
-            v-model="firstName"
-          ></v-text-field>
-          <v-text-field
-            class="mb-3"
-            hide-details
-            label="Last name"
-            v-model="lastName"
+            label="Fullname"
+            v-model="fullname"
           ></v-text-field>
           <v-text-field
             class="mb-3"
@@ -85,8 +75,8 @@
           <v-text-field
             class="mb-3"
             hide-details
-            label="Address"
-            v-model="address"
+            label="Usergroup Id"
+            v-model="userGroup_id"
           ></v-text-field>
         </v-card-text>
         <v-card-actions>
@@ -104,14 +94,8 @@
           <v-text-field
             class="mb-3"
             hide-details
-            label="First name"
-            v-model="firstName"
-          ></v-text-field>
-          <v-text-field
-            class="mb-3"
-            hide-details
-            label="Last name"
-            v-model="lastName"
+            label="Fullname"
+            v-model="fullname"
           ></v-text-field>
           <v-text-field
             class="mb-3"
@@ -136,8 +120,8 @@
           <v-text-field
             class="mb-3"
             hide-details
-            label="Address"
-            v-model="address"
+            label="Usergroup Id"
+            v-model="userGroup_id"
           ></v-text-field>
         </v-card-text>
         <v-card-actions>
@@ -156,20 +140,19 @@
 import { ref, onMounted, computed, onUnmounted } from "vue";
 
 import { useUsersStore } from "../store/usersStore";
-import md5 from "md5"
+import md5 from "md5";
 
 const usersStore = useUsersStore();
 let users = ref([]);
 let editDialog = ref(false);
 let createDialog = ref(false);
-let firstName = ref("");
-let lastName = ref("");
+let fullname = ref("");
 let email = ref("");
 let password = ref("");
 let harshPassword = ref("");
 let phonenumber = ref("");
-let address = ref("");
 let userId = ref("");
+let userGroup_id = ref("");
 
 const getUsers = onMounted(() => {
   usersStore.getUsers();
@@ -186,21 +169,19 @@ const deleteUser = (userId) => {
 
 const editUser = (user) => {
   editDialog.value = true;
-  firstName.value = user.firstName;
-  lastName.value = user.lastName;
+  userId.value = user.id;
+  fullname.value = user.fullname;
   email.value = user.email;
   phonenumber.value = user.phonenumber;
-  address.value = user.address;
-  userId.value = user.id;
+  userGroup_id.value = user.userGroup_id;
 };
 
 const handleEditUser = () => {
   usersStore.updateUser(userId.value, {
-    firstName: firstName.value,
-    lastName: lastName.value,
+    fullname: fullname.value,
     email: email.value,
     phonenumber: phonenumber.value,
-    address: address.value,
+    userGroup_id: userGroup_id.value,
   });
   editDialog.value = false;
   console.log("update user: ", userId.value);
@@ -213,12 +194,11 @@ const harshPsw = (psw) => {
 const handleCreateUser = () => {
   harshPsw(password.value);
   usersStore.createUser({
-    firstName: firstName.value,
-    lastName: lastName.value,
+    fullname: fullname.value,
     email: email.value,
     password: harshPassword.value,
     phonenumber: phonenumber.value,
-    address: address.value,
+    userGroup_id: userGroup_id.value || 2,
   });
   createDialog.value = false;
   console.log("create user successfully");

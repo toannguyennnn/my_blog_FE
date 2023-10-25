@@ -1,68 +1,93 @@
 import { createRouter, createWebHistory } from "vue-router";
-import DefaultVue from "@/layouts/default/Default.vue";
-import HomeVue from "@/views/Home.vue";
-import AdminVue from "@/views/Admin.vue";
-import ManageBlogsVue from "@/views/ManageBlogs.vue";
-import TestVue from "@/views/Test.vue";
-import BlogVue from "@/views/Blog.vue";
-import CreateBlogVue from "@/views/CreateBlog.vue";
-import SignUpVue from "@/views/SignUp.vue";
-import LogIn from "@/views/LogIn.vue";
+import authMiddleware from "@/middleware/authMiddleware";
 
 const routes = [
   {
     path: "/",
-    component: DefaultVue,
+    component: () => import("@/layouts/default/Default.vue"),
     children: [
       {
         path: "",
         name: "Home",
-        component: HomeVue,
+        component: () => import("@/views/Home.vue"),
       },
       {
         path: "/admin",
         name: "Admin",
-        component: AdminVue,
+        component: () => import("@/views/Admin.vue"),
+        meta: { requireAdmin: true },
       },
       {
         path: "/manage-blogs",
         name: "Manage Blogs",
-        component: ManageBlogsVue,
+        component: () => import("@/views/ManageBlogs.vue"),
+        meta: { requireAdmin: true },
       },
       {
         path: "/test",
         name: "Test",
-        component: TestVue,
+        component: () => import("@/views/Test.vue"),
       },
       {
         path: "/blog/:id",
         name: "Blog",
-        component: BlogVue,
+        component: () => import("@/views/Blog.vue"),
       },
       {
         path: "/create-blog",
         name: "CreateBlog",
-        component: CreateBlogVue,
+        component: () => import("@/views/CreateBlog.vue"),
+        meta: { requireAuth: true },
       },
-      
     ],
-    
   },
   {
     path: "/sign-up",
     name: "Sign Up",
-    component: SignUpVue,
+    component: () => import("@/views/SignUp.vue"),
   },
   {
     path: "/log-in",
     name: "Log In",
-    component: LogIn,
+    component: () => import("@/views/LogIn.vue"),
+  },
+
+  {
+    path: "/:pathMatch(.*)*",
+    name: "404NotFound",
+    component: () => import("@/views/404NotFound.vue"),
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from) => {
+  const isAuth= authMiddleware.isAuthenticated();
+  const isAdmin = authMiddleware.isAdmin();
+
+  if (to.meta.requireAdmin && isAdmin) {
+    return true;
+  }
+  if (to.meta.requireAdmin && !isAdmin) {
+    return { name: "Home" };
+  }
+
+  if (to.meta.requireAuth && isAuth) {
+    return true;
+  }
+
+  if (to.meta.requireAuth && !isAuth && to.name !== "Log In") {
+    return { name: "Log In" };
+  }
+
+  if (isAuth) {
+    if (to.name == "Sign Up" || to.name == "Log In") {
+      return { name: "Home" };
+    }
+  }
 });
 
 export default router;

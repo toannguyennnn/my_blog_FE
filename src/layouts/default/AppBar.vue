@@ -21,12 +21,12 @@
 
       <v-list-item
         class="hidden-sm-and-down ms-7"
-        v-for="item in menuItems2"
+        v-for="item in menuItems"
         :key="item.title"
         :title="item.title"
         :prepend-icon="item.icon"
         :value="item.title"
-        @click="routerHandler(item.path)"
+        @click="routerHandler(item.name)"
       >
       </v-list-item>
     </v-list>
@@ -34,7 +34,7 @@
     <v-list nav class="d-flex">
       <v-text-field
         label="Search"
-        class="nav-search hidden-sm-and-down me-2"
+        class="nav-search hidden-sm-and-down"
         hide-details
         density="compact"
         append-inner-icon="mdi-magnify"
@@ -42,6 +42,7 @@
       </v-text-field>
 
       <v-list-item
+        v-if="!isLogged"
         class="hidden-sm-and-down me-2 px-4 text-blue"
         key="Sign up"
         variant="outlined"
@@ -49,13 +50,43 @@
         :to="{ name: 'Sign Up' }"
       >
       </v-list-item>
+
       <v-list-item
+        v-if="!isLogged"
         class="hidden-sm-and-down me-2 bg-blue px-4"
         key="Log in"
         title="Log in"
         :to="{ name: 'Log In' }"
       >
       </v-list-item>
+
+      <span v-else class="d-flex align-center ms-7">
+        <p class="w-100">Welcome, <p class="font-weight-bold d-inline">{{ currentUser.fullname }}</p></p>
+        <v-menu min-width="200px" rounded>
+          <template v-slot:activator="{ props }">
+            <v-btn icon v-bind="props">
+              <v-avatar color="blue" size="small">
+                <v-icon icon="mdi-account-circle" size="x-large"></v-icon>
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text>
+              <div class="mx-auto text-center">
+                <v-avatar color="grey-darken-1">
+                  <v-icon icon="mdi-account-circle" size="x-large"></v-icon>
+                </v-avatar>
+                <h3>{{ currentUser.fullname }}</h3>
+                <p class="text-caption mt-1">{{ currentUser.email }}</p>
+                <v-divider class="my-3"></v-divider>
+                <v-btn rounded variant="text">Manage Blog</v-btn>
+                <v-divider class="my-3"></v-divider>
+                <v-btn rounded variant="text" @click="logOut"> Log out </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-menu></span
+      >
     </v-list>
   </v-app-bar>
 
@@ -70,46 +101,92 @@
       >
       </v-text-field>
       <v-list-item
-        v-for="item in menuItems3"
+        v-for="item in menuItems"
         :key="item.title"
         :title="item.title"
         :prepend-icon="item.icon"
         :value="item.title"
-        @click="routerHandler(item.path)"
+        @click="routerHandler(item.name)"
       >
       </v-list-item>
+      <v-list-item
+        v-if="!isLogged"
+        class="me-2 px-4 text-blue"
+        key="Sign up"
+        variant="outlined"
+        title="Sign up"
+        :to="{ name: 'Sign Up' }"
+      >
+      </v-list-item>
+      <v-list-item
+        v-if="!isLogged"
+        class="me-2 bg-blue px-4"
+        key="Log in"
+        title="Log in"
+        :to="{ name: 'Log In' }"
+      >
+      </v-list-item>
+
+      <v-menu v-else min-width="200px" rounded>
+        <template v-slot:activator="{ props }">
+          <v-btn icon v-bind="props">
+            <v-avatar color="grey-darken-1" size="small">
+              <v-icon icon="mdi-account-circle" size="x-large"></v-icon>
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-text>
+            <div class="mx-auto text-center">
+              <v-avatar color="grey-darken-1">
+                <v-icon icon="mdi-account-circle" size="x-large"></v-icon>
+              </v-avatar>
+              <h3>name</h3>
+              <p class="text-caption mt-1">email</p>
+              <v-divider class="my-3"></v-divider>
+              <v-btn rounded variant="text">Manage Blog</v-btn>
+              <v-divider class="my-3"></v-divider>
+              <v-btn rounded variant="text" @click="logOut"> Log out </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
+import authMiddleware from "@/middleware/authMiddleware";
+
 export default {
   name: "App",
   data() {
     return {
       appTitle: "Awesome App",
       sidebar: false,
-      menuItems2: [
-        { title: "Blogs", path: "#" },
-        { title: "Categories", path: "#" },
-        { title: "Support", path: "#" },
-        { title: "Introduction", path: "#" },
-        { title: "Create blog", path: "/create-blog" },
+      menuItems: [
+        { title: "Blogs", name: "Home" },
+        { title: "Categories", name: "" },
+        { title: "Support", name: "" },
+        { title: "Introduction", name: "" },
+        { title: "Create blog", name: "CreateBlog" },
       ],
-      menuItems3: [
-        { title: "Blogs", path: "#" },
-        { title: "Categories", path: "#" },
-        { title: "Support", path: "#" },
-        { title: "Introduction", path: "#" },
-        { title: "Create blog", path: "#" },
-        { title: "Sign Up", path: "/sign-up", icon: "mdi-account-plus" },
-        { title: "Sign In", path: "#", icon: "mdi-login" },
-      ],
+      isLogged: null,
+      currentUser: {},
     };
   },
+  mounted() {
+    this.isLogged = authMiddleware.isAuthenticated();
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  },
   methods: {
-    routerHandler(path) {
-      this.$router.push(`${path}`);
+    routerHandler(name) {
+      this.$router.push({ name: `${name}` });
+    },
+
+    logOut() {
+      localStorage.clear();
+      window.location.href = "/";
     },
   },
 };

@@ -1,4 +1,5 @@
 import axiosInstance from "@/utils/axiosInstance";
+import router from "@/router";
 
 const createUser = async (newUserData) => {
   try {
@@ -12,7 +13,8 @@ const getUsers = async () => {
   try {
     return await axiosInstance.get("users/all");
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    return error.response.data;
   }
 };
 

@@ -28,5 +28,3 @@ export default {
   }
 }
 </script>
-
-//Use a v-bind binding combined with a v-on listener that emits update:x event instead.

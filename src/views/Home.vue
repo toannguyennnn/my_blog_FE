@@ -1,8 +1,7 @@
 <template>
   <v-container fluid>
-    {{ ttt }}
     <v-row>
-      <v-col cols="10">
+      <v-col lg="10" md="12">
         <div
           v-if="categories"
           v-for="(category, categoryIndex) in categories"
@@ -10,12 +9,9 @@
         >
           <v-row class="mt-1">
             <v-col>
-              <h3 class="text-uppercase">
+              <h3 class="text-uppercase text-blue">
                 <v-icon icon="mdi-newspaper-variant-outline"></v-icon>
-                <router-link
-                  to="#"
-                  class="ms-1 text-decoration-none text-black"
-                >
+                <router-link to="#" class="ms-1 text-decoration-none text-blue">
                   {{ category }}
                 </router-link>
               </h3>
@@ -32,12 +28,16 @@
                 }"
                 class="d-flex align-center"
               >
-                <v-img
-                  :src="getImageSrc(blogsByCategory[categoryIndex][0].image)"
-                  alt=""
-                  height="200"
-                  cover
-                ></v-img>
+                <!-- <v-img
+                    :src="getImageSrc(blogsByCategory[categoryIndex][0].image)"
+                    alt=""
+                    width="100"
+                    height="100%"
+                    class="border"
+                    cover
+                  >
+                  </v-img> -->
+                <v-img src="../assets/p2.jpg" alt="" height="200" cover></v-img>
               </router-link>
             </v-col>
             <v-col cols="6">
@@ -69,7 +69,7 @@
           </v-row>
 
           <v-row>
-            <v-col v-for="n in [1, 2, 3]" v-bind:key="n">
+            <v-col v-for="n in 6" v-bind:key="n" lg="4" md="6" sm="12">
               <div
                 class="d-flex blog-item"
                 v-if="blogsByCategory[categoryIndex][n]"
@@ -81,8 +81,17 @@
                   }"
                   class="d-flex align-center"
                 >
-                  <v-img
+                  <!-- <v-img
                     :src="getImageSrc(blogsByCategory[categoryIndex][n].image)"
+                    alt=""
+                    width="100"
+                    height="100%"
+                    class="border"
+                    cover
+                  >
+                  </v-img> -->
+                  <v-img
+                    src="../assets/p1.jpg"
                     alt=""
                     width="100"
                     height="100%"
@@ -124,57 +133,18 @@
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-col v-for="n in [4, 5, 6]" v-bind:key="n">
-              <div
-                class="d-flex blog-item"
-                v-if="blogsByCategory[categoryIndex][n]"
-              >
-                <router-link
-                  :to="{
-                    name: 'Blog',
-                    params: { id: blogsByCategory[categoryIndex][n].id },
-                  }"
-                  class="d-flex align-center"
-                >
-                  <v-img
-                    :src="getImageSrc(blogsByCategory[categoryIndex][n].image)"
-                    alt=""
-                    width="100"
-                    height="100%"
-                    class="border"
-                    cover
-                  ></v-img>
-                </router-link>
-                <span class="text-justify ms-2">
-                  <h4>
-                    <router-link
-                      :to="{
-                        name: 'Blog',
-                        params: { id: blogsByCategory[categoryIndex][n].id },
-                      }"
-                      class="text-decoration-none text-black"
-                    >
-                      {{ blogsByCategory[categoryIndex][n].title }}
-                    </router-link>
-                  </h4>
-                  <p class="blog-description">
-                    <router-link
-                      :to="{
-                        name: 'Blog',
-                        params: { id: blogsByCategory[categoryIndex][n].id },
-                      }"
-                      class="text-decoration-none text-black"
-                    >
-                      {{ blogsByCategory[categoryIndex][n].description }}
-                    </router-link>
-                  </p>
-                </span>
-              </div>
-              <v-divider
-                v-if="blogsByCategory[categoryIndex][n]"
-                class="mt-3"
-              ></v-divider>
+          <v-row v-if="blogsByCategory[categoryIndex][7]">
+            <v-col class="d-flex justify-center">
+              <router-link
+                to="#"
+                class="text-blue text-subtitle-2 text-decoration-none"
+                >Xem thêm
+                <v-icon
+                  icon="mdi-chevron-right-circle"
+                  class="px-2"
+                  size="x-small"
+                ></v-icon>
+              </router-link>
             </v-col>
           </v-row>
 
@@ -185,9 +155,9 @@
         </div>
       </v-col>
 
-      <v-divider vertical inset></v-divider>
+      <v-divider vertical inset class="hidden-sm-and-down"></v-divider>
 
-      <v-col cols="2">
+      <v-col cols="2" class="hidden-md-and-down">
         <div>
           <v-row>
             <v-col class="text-center">
@@ -307,7 +277,6 @@ const getImageSrc = (image) => {
 a:hover {
   color: #2196f3 !important;
 }
-
 .blog-description {
   width: 100%;
   overflow: hidden;
@@ -318,7 +287,6 @@ a:hover {
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
-
 .blog-item {
   height: 120px;
   overflow: hidden;

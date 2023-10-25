@@ -85,6 +85,11 @@
                 >Sign up</v-btn
               >
             </v-card-actions>
+
+            <div class="text-center my-5">
+              <span class="text-grey">Already had an account? </span>
+              <router-link :to="{name:'Log In'}">Log in</router-link>
+            </div>
           </v-card>
         </v-form>
       </v-col>

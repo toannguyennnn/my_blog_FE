@@ -59,7 +59,7 @@
 
             <v-divider></v-divider>
 
-            <div class="text-center">OR</div>
+            <div class="text-center">OR {{ errMessage }}</div>
 
             <div class="text-center">
               <v-btn icon="mdi-facebook" variant="text" color="blue"></v-btn>
@@ -67,7 +67,8 @@
             </div>
 
             <div class="text-center mt-5">
-              <a href="#">Sign up now!</a>
+              <span class="text-grey">Not have an account yet? </span>
+              <router-link :to="{ name: 'Sign Up' }">Sign up now!</router-link>
             </div>
           </v-form>
         </v-col>
@@ -105,13 +106,16 @@ export default {
       this.loading = true;
       try {
         this.user.harshPassword = md5(this.password);
+
         const data = await this.authStore.logIn({
           email: this.user.email,
           password: this.user.harshPassword,
         });
+
         this.loading = false;
 
-        console.log("login...", data);
+        console.log(data);
+
       } catch (error) {
         console.log(error);
       }
