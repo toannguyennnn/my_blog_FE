@@ -221,19 +221,21 @@ let blogs = ref(null);
 let blogsByCategory = ref([]);
 let categories = ref(null);
 let imageBuffer = ref("");
+let response = ref("");
 
 onMounted(async () => {
-  await getBlogs();
-  blogs.value = blogsStore.blogs;
+  response.value = await blogsStore.getBlogs("all");
+
+  blogs.value = response.value.blogs;
 
   getCategory();
 
   blogsByCategory = filterBlogsByCategory();
 });
 
-const getBlogs = async () => {
-  await blogsStore.getBlogs("all");
-};
+// const getBlogs = async () => {
+//   await blogsStore.getBlogs("all");
+// };
 
 const getCategory = () => {
   categories.value = [];

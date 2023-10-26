@@ -99,8 +99,8 @@ let response = ref("");
 let blogs = ref(null);
 let page = ref(1);
 let limitPerPage = ref(5);
-let totalRows = ref("");
-let totalPages = ref("");
+let totalRows = ref(null);
+let totalPages = ref(null);
 
 onMounted(async () => {
   response.value = await blogsStore.getBlogs(

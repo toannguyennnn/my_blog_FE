@@ -92,8 +92,6 @@ router.beforeEach((to, from) => {
   const isAuth = authMiddleware.isAuthenticated();
   const isAdmin = authMiddleware.isAdmin();
 
-  console.log(isAdmin);
-
   if (to.meta.requireAdmin && isAdmin) {
     return true;
   }

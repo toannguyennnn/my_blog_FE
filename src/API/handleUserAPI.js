@@ -11,9 +11,13 @@ const createUser = async (newUserData) => {
 
 const getUsers = async (currentPage, limit) => {
   try {
-    return await axiosInstance.get(
-      `users/all?page=${currentPage}&limit=${limit}`
-    );
+    if (currentPage && limit) {
+      return await axiosInstance.get(
+        `users/all?page=${currentPage}&limit=${limit}`
+      );
+    } else {
+      `users/all`;
+    }
   } catch (error) {
     console.log(error);
   }

@@ -12,6 +12,7 @@ export const useBlogsStore = defineStore("blogsStore", {
 
     async getBlogs(blogId, currentPage, limit) {
       const response = await handleBlogAPI.getBlogs(blogId, currentPage, limit);
+      this.blogs = response.blogs;
       return response;
     },
 
