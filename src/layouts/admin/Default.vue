@@ -80,8 +80,8 @@
       >
     </v-app-bar>
 
-    <v-main>
-      <router-view/>
+    <v-main class="h-screen d-flex flex-column justify-space-between">
+      <router-view class="flex-1-1" />
 
       <default-footer v-if="!sidebar" />
     </v-main>
@@ -105,6 +105,4 @@ const logOut = () => {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

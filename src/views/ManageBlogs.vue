@@ -2,24 +2,31 @@
   <v-container fluid>
     <v-row>
       <v-col class="text-center">
-        <h3>Blogs management</h3>
+        <h3 class="text-uppercase mt-3">Blogs management</h3>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
+        <div class="d-flex justify-end mb-5">
+          <v-btn class="bg-blue-darken-4"
+            ><v-icon icon="mdi-account-plus" class="me-2"></v-icon>Create
+            blog</v-btn
+          >
+        </div>
+
         <v-table hover>
-          <thead>
+          <thead class="bg-blue">
             <tr>
-              <th>Index</th>
-              <th>User ID</th>
-              <th>Blog ID</th>
-              <th>Author</th>
-              <th>Category</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Thumnail</th>
-              <th>Content</th>
-              <th>Action</th>
+              <th class="text-white">Index</th>
+              <th class="text-white">User ID</th>
+              <th class="text-white">Blog ID</th>
+              <th class="text-white">Author</th>
+              <th class="text-white">Category</th>
+              <th class="text-white">Title</th>
+              <th class="text-white">Description</th>
+              <th class="text-white">Thumnail</th>
+              <th class="text-white">Content</th>
+              <th class="text-white">Action</th>
             </tr>
           </thead>
           <tbody v-if="blogs">

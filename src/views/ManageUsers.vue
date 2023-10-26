@@ -2,21 +2,28 @@
   <v-container fluid>
     <v-row>
       <v-col class="text-center">
-        <h3>User management</h3>
+        <h3 class="text-uppercase mt-3">User management</h3>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
+        <div class="d-flex justify-end mb-5">
+          <v-btn @click="createDialog = true" class="bg-blue-darken-4"
+            ><v-icon icon="mdi-account-plus" class="me-2"></v-icon>Create
+            user</v-btn
+          >
+        </div>
+
         <v-table hover>
-          <thead>
+          <thead class="bg-blue">
             <tr>
-              <th>Index</th>
-              <th>UserId</th>
-              <th>fullname</th>
-              <th>email</th>
-              <th>phonenumber</th>
-              <th>User group</th>
-              <th>Action</th>
+              <th class="text-white">Index</th>
+              <th class="text-white">UserId</th>
+              <th class="text-white">fullname</th>
+              <th class="text-white">email</th>
+              <th class="text-white">phonenumber</th>
+              <th class="text-white">User group</th>
+              <th class="text-white">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -58,8 +65,6 @@
             </tr>
           </tfoot>
         </v-table>
-        <v-btn @click="test">test</v-btn>
-        <v-btn @click="createDialog = true">Create user</v-btn>
       </v-col>
     </v-row>
 
@@ -179,10 +184,6 @@ onMounted(async () => {
   totalRows.value = response.value.data.totalRows;
   totalPages.value = response.value.data.totalPages;
 });
-
-const test = () => {
-  console.log("user>>>>>", users.value);
-};
 
 const fetchPageData = async () => {
   response.value = await usersStore.getUsers(page.value, limitPerPage.value);
