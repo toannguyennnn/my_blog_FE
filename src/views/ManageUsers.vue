@@ -174,7 +174,7 @@ let phonenumber = ref("");
 let userId = ref("");
 let userGroup_id = ref("");
 let page = ref(1);
-let limitPerPage = ref(7);
+let limitPerPage = ref(5);
 let totalRows = ref("");
 let totalPages = ref("");
 

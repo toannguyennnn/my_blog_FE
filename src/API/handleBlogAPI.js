@@ -8,9 +8,11 @@ const createBlog = async (newBlogData) => {
   }
 };
 
-const getBlogs = async (blogId) => {
+const getBlogs = async (blogId, currentPage, limit) => {
   try {
-    return await axiosInstance.get(`blogs/${blogId}`);
+    return await axiosInstance.get(
+      `blogs/${blogId}?page=${currentPage}&limit=${limit}`
+    );
   } catch (error) {
     console.error(error);
   }

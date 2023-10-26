@@ -20,7 +20,6 @@
               <th class="text-white">Index</th>
               <th class="text-white">User ID</th>
               <th class="text-white">Blog ID</th>
-              <th class="text-white">Author</th>
               <th class="text-white">Category</th>
               <th class="text-white">Title</th>
               <th class="text-white">Description</th>
@@ -32,9 +31,8 @@
           <tbody v-if="blogs">
             <tr v-for="(blog, index) in blogs" v-bind:key="blog.id">
               <td>{{ index + 1 }}</td>
-              <td>{{ blog.userId }}</td>
+              <td>{{ blog.user_id }}</td>
               <td>{{ blog.id }}</td>
-              <td>{{ blog.author }}</td>
               <td>{{ blog.category }}</td>
               <td>{{ blog.title }}</td>
               <td>{{ blog.description }}</td>
@@ -63,13 +61,27 @@
             </tr>
           </tbody>
 
-          <tbody>
+          <tbody v-else>
             <tr>
               <td colspan="10" class="text-center" style="height: 100px">
                 <v-progress-circular indeterminate></v-progress-circular>
               </td>
             </tr>
           </tbody>
+
+          <tfoot>
+            <tr>
+              <td colspan="9">
+                <v-pagination
+                  v-model="page"
+                  :length="totalPages"
+                  :total-visible="5"
+                  class="my-3"
+                  @update:modelValue="fetchPageData"
+                ></v-pagination>
+              </td>
+            </tr>
+          </tfoot>
         </v-table>
       </v-col>
     </v-row>
@@ -83,12 +95,32 @@ import { useBlogsStore } from "../store/blogsStore";
 import { Buffer } from "buffer";
 
 const blogsStore = useBlogsStore();
+let response = ref("");
 let blogs = ref(null);
+let page = ref(1);
+let limitPerPage = ref(5);
+let totalRows = ref("");
+let totalPages = ref("");
 
-const getBlogs = onMounted(async () => {
-  await blogsStore.getBlogs("all");
-  blogs.value = blogsStore.blogs;
+onMounted(async () => {
+  response.value = await blogsStore.getBlogs(
+    "all",
+    page.value,
+    limitPerPage.value
+  );
+  blogs.value = response.value.data.blogs;
+  totalRows.value = response.value.data.totalRows;
+  totalPages.value = response.value.data.totalPages;
 });
+
+const fetchPageData = async () => {
+  response.value = await blogsStore.getBlogs(
+    "all",
+    page.value,
+    limitPerPage.value
+  );
+  blogs.value = response.value.data.blogs;
+};
 
 const getImageSrc = (image) => {
   if (image) {
