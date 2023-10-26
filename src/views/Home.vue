@@ -37,7 +37,7 @@
                     cover
                   >
                   </v-img> -->
-                <v-img src="../assets/p2.jpg" alt="" height="200" cover></v-img>
+                <v-img src="../assets/p2.jpg" alt="" height="250" cover></v-img>
               </router-link>
             </v-col>
             <v-col cols="6">
@@ -205,6 +205,7 @@
           </v-card>
         </div>
       </v-col>
+
     </v-row>
   </v-container>
 </template>
@@ -291,5 +292,8 @@ a:hover {
 .blog-item {
   height: 120px;
   overflow: hidden;
+}
+.aaa {
+  top: 2%;
 }
 </style>

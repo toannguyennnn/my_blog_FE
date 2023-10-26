@@ -29,12 +29,21 @@
         @click="routerHandler(item.name)"
       >
       </v-list-item>
+
+      <v-list-item
+        v-if="isAdmin"
+        class="hidden-sm-and-down ms-7"
+        key="Admin panel"
+        title="Admin panel"
+        :to="{ name: 'Admin' }"
+      >
+      </v-list-item>
     </v-list>
 
     <v-list nav class="d-flex">
       <v-text-field
         label="Search"
-        class="nav-search hidden-sm-and-down"
+        class="nav-search hidden-sm-and-down me-7"
         hide-details
         density="compact"
         append-inner-icon="mdi-magnify"
@@ -95,7 +104,7 @@
     </v-list>
   </v-app-bar>
 
-  <v-navigation-drawer v-model="sidebar" temporary>
+  <v-navigation-drawer v-model="sidebar" temporary class="bg-blue" fixed>
     <v-list nav>
       <v-text-field
         label="Search"
@@ -105,6 +114,15 @@
         append-inner-icon="mdi-magnify"
       >
       </v-text-field>
+
+      <v-list-item
+        v-if="isAdmin"
+        key="Admin panel"
+        title="Admin panel"
+        :to="{ name: 'Admin' }"
+      >
+      </v-list-item>
+
       <v-list-item
         v-for="item in menuItems"
         :key="item.title"
@@ -114,55 +132,24 @@
         @click="routerHandler(item.name)"
       >
       </v-list-item>
-      <v-list-item
-        v-if="!isLogged"
-        class="me-2 px-4 text-blue"
-        key="Sign up"
-        variant="outlined"
-        title="Sign up"
-        :to="{ name: 'Sign Up' }"
-      >
-      </v-list-item>
-      <v-list-item
-        v-if="!isLogged"
-        class="me-2 bg-blue px-4"
-        key="Log in"
-        title="Log in"
-        :to="{ name: 'Log In' }"
-      >
-      </v-list-item>
-
-      <v-menu v-else min-width="200px" rounded>
-        <template v-slot:activator="{ props }">
-          <v-btn icon v-bind="props">
-            <v-avatar color="grey-darken-1" size="small">
-              <v-icon icon="mdi-account-circle" size="x-large"></v-icon>
-            </v-avatar>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-text>
-            <div class="mx-auto text-center">
-              <v-avatar color="grey-darken-1">
-                <v-icon icon="mdi-account-circle" size="x-large"></v-icon>
-              </v-avatar>
-              <h3>name</h3>
-              <p class="text-caption mt-1">email</p>
-              <v-divider class="my-3"></v-divider>
-              <v-btn rounded variant="text">Profile</v-btn>
-              <v-btn rounded variant="text">Manage Blog</v-btn>
-              <v-divider class="my-3"></v-divider>
-              <v-btn rounded variant="text" @click="logOut"> Log out </v-btn>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-menu>
     </v-list>
+
+    <template v-slot:append>
+      <div v-if="isLogged" class="pa-2">
+        <v-btn block @click="logOut"> Logout </v-btn>
+      </div>
+      <div v-else class="pa-2">
+        <v-btn block @click="this.$router.push({ name: 'Log In' })">
+          Log in
+        </v-btn>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
 <script>
 import authMiddleware from "@/middleware/authMiddleware";
+import router from "@/router";
 
 export default {
   name: "App",
@@ -174,15 +161,17 @@ export default {
         { title: "Blogs", name: "Home" },
         { title: "Categories", name: "" },
         { title: "Support", name: "" },
-        { title: "Introduction", name: "" },
+        { title: "Introduction", name: "Introduction" },
         { title: "Create blog", name: "CreateBlog" },
       ],
       isLogged: null,
+      isAdmin: null,
       currentUser: {},
     };
   },
   mounted() {
     this.isLogged = authMiddleware.isAuthenticated();
+    this.isAdmin = authMiddleware.isAdmin();
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   },
   methods: {

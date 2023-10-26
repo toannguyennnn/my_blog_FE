@@ -1,6 +1,6 @@
 <template>
   <v-layout class="rounded rounded-md">
-    <v-navigation-drawer v-model="sidebar">
+    <v-navigation-drawer v-model="sidebar" class="bg-blue-darken-4">
       <v-list nav>
         <v-list-item>
           <router-link
@@ -8,7 +8,7 @@
             class="text-decoration-none text-black font-weight-bold d-flex"
           >
             <v-img src="../../assets/logo.svg" max-width="20px"></v-img>
-            <h3 class="ms-1">My Blogs</h3>
+            <h3 class="ms-1 text-white">My Blogs</h3>
           </router-link>
         </v-list-item>
 
