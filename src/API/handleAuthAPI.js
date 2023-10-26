@@ -39,8 +39,11 @@ const logIn = async (userData) => {
 
       localStorage.setItem("token", `${token}`);
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-      router.push("/");
+      if (response.data.user.userGroup_id == 1) {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
     }
     // console.log("get user", JSON.parse(localStorage.getItem("currentUser")));
     return response.data;

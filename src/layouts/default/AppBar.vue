@@ -61,7 +61,12 @@
       </v-list-item>
 
       <span v-else class="d-flex align-center ms-7">
-        <p class="w-100">Welcome, <p class="font-weight-bold d-inline">{{ currentUser.fullname }}</p></p>
+        <span class="w-100"
+          >Welcome,
+          <p class="font-weight-bold d-inline">
+            {{ currentUser.fullname }}
+          </p></span
+        >
         <v-menu min-width="200px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props">
@@ -144,6 +149,7 @@
               <h3>name</h3>
               <p class="text-caption mt-1">email</p>
               <v-divider class="my-3"></v-divider>
+              <v-btn rounded variant="text">Profile</v-btn>
               <v-btn rounded variant="text">Manage Blog</v-btn>
               <v-divider class="my-3"></v-divider>
               <v-btn rounded variant="text" @click="logOut"> Log out </v-btn>

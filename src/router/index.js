@@ -11,18 +11,18 @@ const routes = [
         name: "Home",
         component: () => import("@/views/Home.vue"),
       },
-      {
-        path: "/admin",
-        name: "Admin",
-        component: () => import("@/views/Admin.vue"),
-        meta: { requireAdmin: true },
-      },
-      {
-        path: "/manage-blogs",
-        name: "Manage Blogs",
-        component: () => import("@/views/ManageBlogs.vue"),
-        meta: { requireAdmin: true },
-      },
+      // {
+      //   path: "/admin",
+      //   name: "Admin",
+      //   component: () => import("@/views/Admin.vue"),
+      //   meta: { requireAdmin: true },
+      // },
+      // {
+      //   path: "/manage-blogs",
+      //   name: "Manage Blogs",
+      //   component: () => import("@/views/ManageBlogs.vue"),
+      //   meta: { requireAdmin: true },
+      // },
       {
         path: "/test",
         name: "Test",
@@ -57,6 +57,30 @@ const routes = [
     name: "404NotFound",
     component: () => import("@/views/404NotFound.vue"),
   },
+  {
+    path: "/",
+    component: () => import("@/layouts/admin/Default.vue"),
+    children: [
+      {
+        path: "/admin",
+        name: "Admin",
+        component: () => import("@/views/Admin.vue"),
+        meta: { requireAdmin: true },
+      },
+      {
+        path: "/admin/manage-users",
+        name: "Manage Users",
+        component: () => import("@/views/ManageUsers.vue"),
+        meta: { requireAdmin: true },
+      },
+      {
+        path: "/admin/manage-blogs",
+        name: "Manage Blogs",
+        component: () => import("@/views/ManageBlogs.vue"),
+        meta: { requireAdmin: true },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
@@ -65,10 +89,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-  const isAuth= authMiddleware.isAuthenticated();
+  const isAuth = authMiddleware.isAuthenticated();
   const isAdmin = authMiddleware.isAdmin();
 
-  console.log(isAdmin)
+  console.log(isAdmin);
 
   if (to.meta.requireAdmin && isAdmin) {
     return true;

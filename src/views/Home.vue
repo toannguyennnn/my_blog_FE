@@ -269,7 +269,6 @@ const getImageSrc = (image) => {
     const imageBuffer = new Buffer(image, "base64").toString("binary");
     return imageBuffer;
   }
-  console.log("No imageBuffer");
 };
 </script>
 
