@@ -20,7 +20,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in usersStore.users" v-bind:key="user.id">
+            <tr v-for="(user, index) in users" v-bind:key="user.id">
               <td>{{ index + 1 }}</td>
               <td>{{ user.id }}</td>
               <td>{{ user.fullname }}</td>
@@ -43,6 +43,20 @@
               </td>
             </tr>
           </tbody>
+
+          <tfoot>
+            <tr>
+              <td colspan="7">
+                <v-pagination
+                  v-model="page"
+                  :length="totalPages"
+                  :total-visible="5"
+                  class="my-3"
+                  @update:modelValue="fetchPageData"
+                ></v-pagination>
+              </td>
+            </tr>
+          </tfoot>
         </v-table>
         <v-btn @click="test">test</v-btn>
         <v-btn @click="createDialog = true">Create user</v-btn>
@@ -137,13 +151,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onUnmounted } from "vue";
+import { ref, onMounted } from "vue";
 
 import { useUsersStore } from "../store/usersStore";
 import md5 from "md5";
 
 const usersStore = useUsersStore();
-let users = ref([]);
+let response = ref("");
+let users = ref("");
 let editDialog = ref(false);
 let createDialog = ref(false);
 let fullname = ref("");
@@ -153,13 +168,25 @@ let harshPassword = ref("");
 let phonenumber = ref("");
 let userId = ref("");
 let userGroup_id = ref("");
+let page = ref(1);
+let limitPerPage = ref(7);
+let totalRows = ref("");
+let totalPages = ref("");
 
-const getUsers = onMounted(() => {
-  usersStore.getUsers();
+onMounted(async () => {
+  response.value = await usersStore.getUsers(page.value, limitPerPage.value);
+  users.value = response.value.data.users;
+  totalRows.value = response.value.data.totalRows;
+  totalPages.value = response.value.data.totalPages;
 });
 
 const test = () => {
-  console.log("user>>>>>", usersStore.users);
+  console.log("user>>>>>", users.value);
+};
+
+const fetchPageData = async () => {
+  response.value = await usersStore.getUsers(page.value, limitPerPage.value);
+  users.value = response.value.data.users;
 };
 
 const deleteUser = (userId) => {

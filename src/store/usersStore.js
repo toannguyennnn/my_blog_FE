@@ -4,7 +4,6 @@ import handleUserAPI from "@/API/handleUserAPI";
 export const useUsersStore = defineStore("usersStore", {
   state: () => ({
     users: [],
-    response: null,
   }),
   actions: {
     async createUser(newUserData) {
@@ -13,11 +12,10 @@ export const useUsersStore = defineStore("usersStore", {
       // location.reload();
     },
 
-    async getUsers() {
-      const response = await handleUserAPI.getUsers();
-      if (response && response.users) {
-        this.users = response.users;
-      }
+    async getUsers(currentPage, limit) {
+      const response = await handleUserAPI.getUsers(currentPage, limit);
+      this.users = response.data.users;
+      return response;
     },
 
     async updateUser(userId, updatedData) {

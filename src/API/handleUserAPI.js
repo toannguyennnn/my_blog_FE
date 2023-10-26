@@ -9,12 +9,13 @@ const createUser = async (newUserData) => {
   }
 };
 
-const getUsers = async () => {
+const getUsers = async (currentPage, limit) => {
   try {
-    return await axiosInstance.get("users/all");
+    return await axiosInstance.get(
+      `users/all?page=${currentPage}&limit=${limit}`
+    );
   } catch (error) {
     console.log(error);
-    return error.response.data;
   }
 };
 
