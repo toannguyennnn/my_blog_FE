@@ -114,6 +114,7 @@ onMounted(async () => {
 });
 
 const fetchPageData = async () => {
+  blogs.value = null;
   response.value = await blogsStore.getBlogs(
     "all",
     page.value,

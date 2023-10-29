@@ -31,6 +31,11 @@
           :to="{ name: 'Manage Blogs' }"
         ></v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click="logOut"> Logout </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar title="Management Dashboard" icon>

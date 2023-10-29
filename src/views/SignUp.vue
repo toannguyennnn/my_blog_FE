@@ -53,7 +53,7 @@
                 :type="isHidePass ? 'password' : 'text'"
                 v-model="password"
                 :readonly="loading"
-                :rules="[required]"
+                :rules="[pswRule]"
                 label="Password"
                 :append-inner-icon="isHidePass ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append-inner="isHidePass = !isHidePass"
@@ -64,7 +64,7 @@
                 :type="isHidePassConfirm ? 'password' : 'text'"
                 v-model="confirmPassword"
                 :readonly="loading"
-                :rules="[required]"
+                :rules="[pswRule]"
                 label="Confirm password"
                 :append-inner-icon="
                   isHidePassConfirm ? 'mdi-eye' : 'mdi-eye-off'
@@ -73,6 +73,10 @@
                 density="compact"
                 prepend-inner-icon="mdi-lock-outline"
               ></v-text-field>
+
+              <p class="text-red-darken-4 mt-2 font-weight-bold">
+                {{ errorMessage }}
+              </p>
             </v-card-text>
             <v-card-actions class="justify-center">
               <v-btn
@@ -88,7 +92,7 @@
 
             <div class="text-center my-5">
               <span class="text-grey">Already had an account? </span>
-              <router-link :to="{name:'Log In'}">Log in</router-link>
+              <router-link :to="{ name: 'Log In' }">Log in</router-link>
             </div>
           </v-card>
         </v-form>
@@ -117,6 +121,7 @@ export default {
       authStore: useAuthStore(),
       form: false,
       loading: false,
+      errorMessage: "",
     };
   },
   // computed: {
@@ -130,7 +135,7 @@ export default {
       this.loading = true;
       try {
         this.user.harshPassword = md5(this.password);
-        await this.authStore.signUp({
+        const data = await this.authStore.signUp({
           fullname: this.user.fullname,
           email: this.user.email,
           password: this.user.harshPassword,
@@ -138,13 +143,27 @@ export default {
         });
         this.loading = false;
 
-        console.log("create user successfully", this.user);
+        console.log("create user", data);
+
+        if (data.errMessage) {
+          this.errorMessage = data.errMessage;
+        }
       } catch (error) {
         console.log(error);
       }
     },
 
     required(v) {
+      return !!v || "Field is required";
+    },
+
+    pswRule(v) {
+      if (this.password && this.confirmPassword) {
+        return (
+          this.password == this.confirmPassword ||
+          "Password and confirmed password is not match"
+        );
+      }
       return !!v || "Field is required";
     },
   },

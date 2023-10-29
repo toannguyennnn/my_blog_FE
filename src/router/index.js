@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import authMiddleware from "@/middleware/authMiddleware";
+import { useErrStore } from "@/store/errStore";
 
 const routes = [
   {
@@ -97,19 +98,34 @@ router.beforeEach((to, from) => {
   const isAuth = authMiddleware.isAuthenticated();
   const isAdmin = authMiddleware.isAdmin();
 
-  if (to.meta.requireAdmin && isAdmin) {
-    return true;
-  }
-  if (to.meta.requireAdmin && !isAdmin) {
-    return { name: "Home" };
+  if (to.meta.requireAdmin) {
+    return isAdmin ? true : { name: "Home" };
   }
 
-  if (to.meta.requireAuth && isAuth) {
-    return true;
-  }
+  if (to.meta.requireAuth) {
+    if (isAuth) return true;
+    else if (!isAuth && to.name !== "Log In") {
+      const errStore = useErrStore();
+      const error = {
+        type: "warning",
+        title: "You have to log in",
+        message: "To perform this function, you have to log in first",
+        action: "Log in",
+        handleAction: () => {
+          router.push({ name: "Log In" });
+          errStore.closeAlert();
+        },
+      };
+      errStore.showAlert(
+        error.type,
+        error.title,
+        error.message,
+        error.action,
+        error.handleAction
+      );
 
-  if (to.meta.requireAuth && !isAuth && to.name !== "Log In") {
-    return { name: "Log In" };
+      return false;
+    }
   }
 
   if (isAuth) {

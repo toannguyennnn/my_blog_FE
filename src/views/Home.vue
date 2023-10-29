@@ -205,7 +205,6 @@
           </v-card>
         </div>
       </v-col>
-
     </v-row>
   </v-container>
 </template>
@@ -292,8 +291,5 @@ a:hover {
 .blog-item {
   height: 120px;
   overflow: hidden;
-}
-.aaa {
-  top: 2%;
 }
 </style>

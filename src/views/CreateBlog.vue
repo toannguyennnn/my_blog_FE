@@ -277,10 +277,8 @@ export default {
       let file = data[0];
       if (file) {
         let base64 = await getBase64(file);
-        console.log(base64);
         this.newBlog.image = base64;
         let objectUrl = URL.createObjectURL(file);
-        console.log(objectUrl);
         this.previewImageUrl = objectUrl;
       }
     },
@@ -305,8 +303,7 @@ export default {
         this.newBlog.title &&
         this.newBlog.description &&
         this.newBlog.category &&
-        this.newBlog.editorContent &&
-        this.newBlog.image
+        this.newBlog.editorContent
       ) {
         const blogsStore = useBlogsStore();
 
@@ -318,14 +315,12 @@ export default {
           image: this.newBlog.image,
           user_id: this.newBlog.userId,
         });
-        console.log("create blog...");
         this.isShowSnackBar = true;
         this.snackBarText = "Create blog successfully!";
         this.snackbarColor = "green";
         this.snackBarIcon = "mdi-check-circle";
         this.reset();
       } else {
-        console.log("Failed...");
         this.isShowSnackBar = true;
         this.snackbarColor = "red";
         this.snackBarText = "Something went wrong!";

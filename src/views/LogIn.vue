@@ -41,9 +41,9 @@
               ></v-text-field>
               <div class="text-right"><a href="#">Forget password?</a></div>
 
-              <!-- <p class="text-red-darken-4 mt-2 font-weight-bold">
+              <p class="text-red-darken-4 mt-2 font-weight-bold">
                 {{ errorMessage }}
-              </p> -->
+              </p>
             </v-card-text>
             <v-card-actions class="justify-center">
               <v-btn
@@ -92,8 +92,6 @@ export default {
       errorMessage: "",
       isHidePass: true,
       authStore: useAuthStore(),
-      isError: false,
-      errStyle: "",
       errMessage: "",
       form: false,
       loading: false,
@@ -116,18 +114,12 @@ export default {
 
         console.log(data);
 
+        if (data.errMessage) {
+          this.errorMessage = data.errMessage;
+        }
       } catch (error) {
         console.log(error);
       }
-
-      // const data = await this.authStore.logIn({
-      //   email: this.user.email,
-      //   password: this.user.harshPassword,
-      // });
-      // this.loading = false;
-      // if (data.errMessage) {
-      //   this.errorMessage = data.errMessage;
-      // }
     },
 
     required(v) {

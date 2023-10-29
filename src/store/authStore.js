@@ -7,7 +7,8 @@ export const useAuthStore = defineStore("authStore", {
   }),
   actions: {
     async signUp(newUserData) {
-      await handleAuthAPI.signUp(newUserData);
+      const data = await handleAuthAPI.signUp(newUserData);
+      return data;
     },
     async logIn(userData) {
       const data = await handleAuthAPI.logIn(userData);
