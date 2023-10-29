@@ -24,7 +24,7 @@
                 v-model="user.email"
                 label="Email"
                 :readonly="loading"
-                :rules="[required]"
+                :rules="[required, emailRule]"
                 prepend-inner-icon="mdi-email-outline"
               >
               </v-text-field>
@@ -124,6 +124,15 @@ export default {
 
     required(v) {
       return !!v || "Field is required";
+    },
+    emailRule(v) {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      const isEmail = emailRegex.test(v);
+      if (isEmail) {
+        return true;
+      } else {
+        return "You have to enter correct email format like: example@email.com";
+      }
     },
   },
 };

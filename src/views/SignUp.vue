@@ -35,7 +35,8 @@
               ></v-text-field>
               <v-text-field
                 :readonly="loading"
-                :rules="[required]"
+                :rules="[required, emailRule]"
+                @input=""
                 v-model="user.email"
                 label="Email"
                 density="compact"
@@ -44,7 +45,7 @@
               <v-text-field
                 v-model="user.phonenumber"
                 :readonly="loading"
-                :rules="[required]"
+                :rules="[required, phoneRule]"
                 label="Phonenumber"
                 density="compact"
                 prepend-inner-icon="mdi-phone"
@@ -53,8 +54,10 @@
                 :type="isHidePass ? 'password' : 'text'"
                 v-model="password"
                 :readonly="loading"
-                :rules="[pswRule]"
+                :rules="[required, pswRule]"
                 label="Password"
+                @input="checkConfirmPsw()"
+                :error-messages="checkConfirmPswMess"
                 :append-inner-icon="isHidePass ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append-inner="isHidePass = !isHidePass"
                 density="compact"
@@ -64,7 +67,9 @@
                 :type="isHidePassConfirm ? 'password' : 'text'"
                 v-model="confirmPassword"
                 :readonly="loading"
-                :rules="[pswRule]"
+                :rules="[required, pswRule]"
+                @input="checkConfirmPsw()"
+                :error-messages="checkConfirmPswMess"
                 label="Confirm password"
                 :append-inner-icon="
                   isHidePassConfirm ? 'mdi-eye' : 'mdi-eye-off'
@@ -122,13 +127,9 @@ export default {
       form: false,
       loading: false,
       errorMessage: "",
+      checkConfirmPswMess: "",
     };
   },
-  // computed: {
-  //   nameRules() {
-  //     (value) => !!value || "Field is required";
-  //   },
-  // },
   methods: {
     async onSubmit() {
       if (!this.form) return;
@@ -158,13 +159,39 @@ export default {
     },
 
     pswRule(v) {
-      if (this.password && this.confirmPassword) {
-        return (
-          this.password == this.confirmPassword ||
-          "Password and confirmed password is not match"
-        );
+      if (v.length < 6) {
+        return "Password must have more than 6 characters";
+      } else return true;
+    },
+
+    emailRule(v) {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      const isEmail = emailRegex.test(v);
+      if (isEmail) {
+        return true;
+      } else {
+        return "You have to enter correct email format like: example@email.com";
       }
-      return !!v || "Field is required";
+    },
+    phoneRule(v) {
+      const phoneRegex = /^(\+\d{1,4}\s?)?(\d{10})$/;
+      const isPhonenumber = phoneRegex.test(v);
+      if (isPhonenumber) {
+        return true;
+      } else {
+        return "Phonenumber format example: (+84) 123-456-7890 or 1234567890";
+      }
+    },
+
+    checkConfirmPsw() {
+      if (this.password && this.confirmPassword) {
+        if (this.password === this.confirmPassword) {
+          this.checkConfirmPswMess = "";
+        } else {
+          this.checkConfirmPswMess =
+            "Password and confirmed password is not match";
+        }
+      }
     },
   },
 };

@@ -16,7 +16,7 @@ const getUsers = async (currentPage, limit) => {
         `users/all?page=${currentPage}&limit=${limit}`
       );
     } else {
-      `users/all`;
+      return await axiosInstance.get(`users/all`);
     }
   } catch (error) {
     console.log(error);

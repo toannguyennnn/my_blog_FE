@@ -8,7 +8,7 @@
     <v-row>
       <v-col>
         <div class="d-flex justify-end mb-5">
-          <v-btn @click="createDialog = true" class="bg-blue-darken-4"
+          <v-btn @click="createDialog" class="bg-blue-darken-4"
             ><v-icon icon="mdi-account-plus" class="me-2"></v-icon>Create
             user</v-btn
           >
@@ -106,7 +106,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="createDialog" width="500">
+    <v-dialog v-model="isCreateDialog" width="500">
       <v-card>
         <v-card-title class="text-center">Create user</v-card-title>
         <v-card-text>
@@ -145,7 +145,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="createDialog = false" class="bg-red"
+          <v-btn @click="isCreateDialog = false" class="bg-red"
             >Close Dialog</v-btn
           >
           <v-btn @click="handleCreateUser" class="bg-blue">Create</v-btn>
@@ -165,7 +165,7 @@ const usersStore = useUsersStore();
 let response = ref("");
 let users = ref("");
 let editDialog = ref(false);
-let createDialog = ref(false);
+let isCreateDialog = ref(false);
 let fullname = ref("");
 let email = ref("");
 let password = ref("");
@@ -180,14 +180,14 @@ let totalPages = ref("");
 
 onMounted(async () => {
   response.value = await usersStore.getUsers(page.value, limitPerPage.value);
-  users.value = response.value.data.users;
+  users.value = usersStore.users;
   totalRows.value = response.value.data.totalRows;
   totalPages.value = response.value.data.totalPages;
 });
 
 const fetchPageData = async () => {
-  response.value = await usersStore.getUsers(page.value, limitPerPage.value);
-  users.value = response.value.data.users;
+  await usersStore.getUsers(page.value, limitPerPage.value);
+  users.value = usersStore.users;
 };
 
 const deleteUser = (userId) => {
@@ -217,6 +217,14 @@ const handleEditUser = () => {
 
 const harshPsw = (psw) => {
   return (harshPassword.value = md5(psw));
+};
+
+const createDialog = () => {
+  isCreateDialog.value = true;
+  fullname.value = "";
+  email.value = "";
+  phonenumber.value = "";
+  userGroup_id.value = "";
 };
 
 const handleCreateUser = () => {
