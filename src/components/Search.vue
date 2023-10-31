@@ -93,7 +93,7 @@ const onFocus = () => {
 };
 
 const onBlur = () => {
-  isShow.value = false;
+  // isShow.value = false;
 };
 </script>
 <style>
