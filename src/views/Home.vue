@@ -211,8 +211,6 @@
 
 <script setup>
 import { useBlogsStore } from "../store/blogsStore";
-import { useAuthStore } from "../store/authStore";
-
 import { ref, onMounted, onBeforeMount } from "vue";
 import { Buffer } from "buffer";
 

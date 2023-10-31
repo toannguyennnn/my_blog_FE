@@ -41,15 +41,6 @@
     </v-list>
 
     <v-list nav class="d-flex">
-      <v-text-field
-        label="Search"
-        class="nav-search hidden-sm-and-down me-7"
-        hide-details
-        density="compact"
-        append-inner-icon="mdi-magnify"
-      >
-      </v-text-field>
-
       <v-list-item
         v-if="!isLogged"
         class="hidden-sm-and-down me-2 px-4 text-blue"
@@ -145,11 +136,14 @@
       </div>
     </template>
   </v-navigation-drawer>
+
+  <SearchVue class="position-absolute search-inp" />
 </template>
 
 <script>
 import authMiddleware from "@/middleware/authMiddleware";
 import router from "@/router";
+import SearchVue from "@/components/Search.vue";
 
 export default {
   name: "App",
@@ -169,6 +163,7 @@ export default {
       currentUser: {},
     };
   },
+  components: { SearchVue },
   mounted() {
     this.isLogged = authMiddleware.isAuthenticated();
     this.isAdmin = authMiddleware.isAdmin();
@@ -198,5 +193,11 @@ export default {
 
 .nav-search .v-field.v-field--appended {
   width: 160px;
+}
+
+.search-inp {
+  top: 5px;
+  z-index: 99999;
+  right: 20%;
 }
 </style>
